@@ -3,6 +3,7 @@ package com.example.trendCatcherProject.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -17,7 +18,8 @@ import java.util.Map;
 @Service
 public class StockService {
 
-    private final String apiKey = "";
+    @Value("${apiKey}")
+    private String apiKey;
     private final String alphaVantageURL = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=";
     private final RestTemplate restTemplate;
 
