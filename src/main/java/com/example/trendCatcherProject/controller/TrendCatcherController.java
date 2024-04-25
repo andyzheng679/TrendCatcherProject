@@ -19,8 +19,4 @@ public class TrendCatcherController {
         return stockService.getHistoricData("SPY");
     }
 
-    @GetMapping("/move")
-    public double getPercentageMove(){
-        return stockService.getPercentageMove(505.41, 503.95);
-    }
 }

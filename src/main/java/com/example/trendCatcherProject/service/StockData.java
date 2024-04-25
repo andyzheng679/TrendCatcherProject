@@ -7,6 +7,7 @@ public class StockData {
     private double high;
     private double low;
     private double close;
+    private double percentageMove;
 
     // Constructor
     public StockData(String date, double open, double high, double low, double close) {
@@ -15,9 +16,23 @@ public class StockData {
         this.high = high;
         this.low = low;
         this.close = close;
+        this.percentageMove = calculatePercentageMove(open, close);
+    }
+
+    private double calculatePercentageMove(double start, double end) {
+        double result =  ((end - start) / start) * 100;
+        return Math.ceil(result * 100)/100;
     }
 
     // Getters and setters
+    public double getPercentageMove() {
+        return percentageMove;
+    }
+
+    public void setPercentageMove(double percentageMove) {
+        this.percentageMove = percentageMove;
+    }
+
     public String getDate() {
         return date;
     }

@@ -85,11 +85,6 @@ public class StockService {
 
     }
 
-    public double getPercentageMove(double start, double end){
-        double result = ((end-start)/(start)) * 100;
-
-        return Double.parseDouble(String.format("%.2f", result));
-    }
 
 
 }
