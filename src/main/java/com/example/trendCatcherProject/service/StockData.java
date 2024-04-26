@@ -9,6 +9,7 @@ public class StockData {
     private double close;
     private double intradayPercentageMove;
     private double twoDayPercentageMove;
+    private double fiveDayPercentageMove;
 
     // Constructor
     public StockData(String date, double open, double high, double low, double close) {
@@ -18,6 +19,14 @@ public class StockData {
         this.low = low;
         this.close = close;
         this.intradayPercentageMove = calculatePercentageMove(open, close);
+    }
+
+    public double getFiveDayPercentageMove() {
+        return fiveDayPercentageMove;
+    }
+
+    public void setFiveDayPercentageMove(double fiveDayPercentageMove) {
+        this.fiveDayPercentageMove = fiveDayPercentageMove;
     }
 
     public double getTwoDayPercentageMove() {
