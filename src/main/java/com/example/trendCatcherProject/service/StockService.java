@@ -55,7 +55,7 @@ public class StockService {
                 Iterator<Map.Entry<String, JsonNode>> fields = timeSeriesNode.fields();
                 //looping through a map like structure, key values
 
-                LocalDate fiveYearsAgo = LocalDate.now().minusYears(5);
+                LocalDate fiveYearsAgo = LocalDate.now().minusYears(1); //change back to 5 years
                 //date 5 year from today
 
                 while (fields.hasNext()) {
@@ -142,6 +142,10 @@ public class StockService {
     public double calculatePercentageMove(double start, double end) {
         double result =  ((end - start) / start) * 100;
         return Math.ceil(result * 100)/100;
+    }
+
+    public double averageDayMove(List<StockData> stockDataList){
+        //finding avg 2 day move
     }
 
 
