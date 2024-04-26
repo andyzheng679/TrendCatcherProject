@@ -22,13 +22,20 @@ public class StockService {
     private String apiKey;
     private final String alphaVantageURL = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=";
     private final RestTemplate restTemplate;
+    private AverageMove averageMove;
 
     @Autowired
-    public StockService(RestTemplate restTemplate){
+    public StockService(RestTemplate restTemplate, AverageMove averageMove){
+
         this.restTemplate = restTemplate;
+        this.averageMove =averageMove;
     }
     //inject RestTemplate obj when StockService is created
     //configured and a bean
+
+    public AverageMove getAverageMove() {
+        return this.averageMove;
+    }
 
     public List<StockData> getHistoricData(String stockSymbol){
         String url = alphaVantageURL + stockSymbol + "&outputsize=full&apikey=" + apiKey;
@@ -144,9 +151,51 @@ public class StockService {
         return Math.ceil(result * 100)/100;
     }
 
-    public double averageDayMove(List<StockData> stockDataList){
-        //finding avg 2 day move
+    //gets all obj where intraday move is 1% or greater
+    public List<StockData> avgTwoDayMoveOnePer (List<StockData> stockDataList) {
+        List<StockData> avgTwoDayOnePer = new ArrayList<>();
+        for (int i = 0; i < stockDataList.size(); i++) {
+            StockData current = stockDataList.get(i);
+            if (current.getIntradayPercentageMove() >= 1.00) {
+                avgTwoDayOnePer.add(current);
+            }
+        }
+        return avgTwoDayOnePer;
     }
+
+    public int settingAvgTwoDayMoveOnePer(List<StockData> avgTwoDayOnePer){
+        int counter = 0;
+        double sum = 0;
+
+        for(int i = 0; i < avgTwoDayOnePer.size(); i++){
+            StockData current = avgTwoDayOnePer.get(i);
+            if(current.getTwoDayPercentageMove() != 100){
+                sum += current.getTwoDayPercentageMove();
+                counter++;
+            }
+        }
+        averageMove.setAvgTwoDayMoveOnePer(sum/counter);
+        return counter;
+    }
+
+
+
+
+//        double holder = 0;
+//        int numOfDays = 0;
+//        for(int i = 0; i < avgTwoDayOnePer.size(); i++){
+//            StockData current = avgTwoDayOnePer.get(i);
+//            if(current.getTwoDayPercentageMove() != 100){
+//                holder += current.getTwoDayPercentageMove();
+//                numOfDays++;
+//            }
+//        }
+
+
+//    public double averageDayMove(List<StockData> stockDataList){
+//        //finding avg 2 day move
+//
+//    }
 
 
 

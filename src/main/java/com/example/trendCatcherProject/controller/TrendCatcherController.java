@@ -1,5 +1,6 @@
 package com.example.trendCatcherProject.controller;
 
+import com.example.trendCatcherProject.service.AverageMove;
 import com.example.trendCatcherProject.service.StockData;
 import com.example.trendCatcherProject.service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,25 @@ public class TrendCatcherController {
     @Autowired
     private StockService stockService;
 
+
+
+
     @GetMapping("/")
     public List<StockData> getHistoricalData(){
         return stockService.getHistoricData("SPY");
     }
+
+    @GetMapping("/test")
+    public List<StockData> getAllOnePerIntraday(){
+        return stockService.avgTwoDayMoveOnePer(stockService.getHistoricData("SPY"));
+    }
+
+    @GetMapping("/test2")
+    public double getFieldFromAverageMove(){
+        stockService.settingAvgTwoDayMoveOnePer(stockService.avgTwoDayMoveOnePer(stockService.getHistoricData("SPY")));
+        return stockService.getAverageMove().getAvgTwoDayMoveOnePer();
+    }
+
 
 }
 

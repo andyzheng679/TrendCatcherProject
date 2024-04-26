@@ -1,5 +1,8 @@
 package com.example.trendCatcherProject.service;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class AverageMove {
 
     //two day 1%, -1%
@@ -31,6 +34,7 @@ public class AverageMove {
     //ten day 3%, -3%
     private double avgTenDayMoveThreePer;
     private double avgTenDayMoveNegThreePer;
+
 
     public AverageMove(){
         //
