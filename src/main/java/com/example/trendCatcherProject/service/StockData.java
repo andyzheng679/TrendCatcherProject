@@ -7,7 +7,8 @@ public class StockData {
     private double high;
     private double low;
     private double close;
-    private double percentageMove;
+    private double intradayPercentageMove;
+    private double twoDayPercentageMove;
 
     // Constructor
     public StockData(String date, double open, double high, double low, double close) {
@@ -16,7 +17,15 @@ public class StockData {
         this.high = high;
         this.low = low;
         this.close = close;
-        this.percentageMove = calculatePercentageMove(open, close);
+        this.intradayPercentageMove = calculatePercentageMove(open, close);
+    }
+
+    public double getTwoDayPercentageMove() {
+        return twoDayPercentageMove;
+    }
+
+    public void setTwoDayPercentageMove(double twoDayPercentageMove) {
+        this.twoDayPercentageMove = twoDayPercentageMove;
     }
 
     private double calculatePercentageMove(double start, double end) {
@@ -25,12 +34,12 @@ public class StockData {
     }
 
     // Getters and setters
-    public double getPercentageMove() {
-        return percentageMove;
+    public double getIntradayPercentageMove() {
+        return intradayPercentageMove;
     }
 
-    public void setPercentageMove(double percentageMove) {
-        this.percentageMove = percentageMove;
+    public void setIntradayPercentageMove(double percentageMove) {
+        this.intradayPercentageMove = percentageMove;
     }
 
     public String getDate() {

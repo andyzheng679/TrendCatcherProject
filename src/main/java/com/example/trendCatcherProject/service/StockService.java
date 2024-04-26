@@ -81,8 +81,31 @@ public class StockService {
         } catch (IOException e){
             e.printStackTrace();
         }
-        return  stockDataList;
+        updateTwoDayMove(stockDataList);
 
+        return  stockDataList;
+    }
+
+    public void updateTwoDayMove(List<StockData> stockDataList){
+        for(int i = stockDataList.size()-1; i >= 0; i--){
+            StockData startDay = stockDataList.get(i);
+            //set to ith object
+            if(i - 2 >= 0){
+                StockData futureTwoDays = stockDataList.get(i - 2);
+                //get 2 days ahead of startDay
+
+                double twoDayPercentageMove = calculatePercentageMove(startDay.getOpen(), futureTwoDays.getClose());
+                startDay.setTwoDayPercentageMove(twoDayPercentageMove);
+            }else{
+                startDay.setTwoDayPercentageMove(100.00);
+                //if future days don't exist, set to 100.00
+            }
+        }
+    }
+
+    public double calculatePercentageMove(double start, double end) {
+        double result =  ((end - start) / start) * 100;
+        return Math.ceil(result * 100)/100;
     }
 
 
