@@ -83,6 +83,7 @@ public class StockService {
         }
         updateTwoDayMove(stockDataList);
         updateFiveDayMove(stockDataList);
+        updateTenDayMove(stockDataList);
 
         return  stockDataList;
     }
@@ -116,6 +117,23 @@ public class StockService {
                 startDay.setFiveDayPercentageMove(fiveDayPercentageMove);
             }else{
                 startDay.setFiveDayPercentageMove(100.00);
+                //if future days don't exist, set to 100.00
+            }
+        }
+    }
+
+    public void updateTenDayMove(List<StockData> stockDataList){
+        for(int i = stockDataList.size()-1; i >= 0; i--){
+            StockData startDay = stockDataList.get(i);
+            //set to ith object
+            if(i - 10 >= 0){
+                StockData futureTenDays = stockDataList.get(i - 10);
+                //get 10 days ahead of startDay
+
+                double tenDayPercentageMove = calculatePercentageMove(startDay.getOpen(), futureTenDays.getClose());
+                startDay.setTenDayPercentageMove(tenDayPercentageMove);
+            }else{
+                startDay.setTenDayPercentageMove(100.00);
                 //if future days don't exist, set to 100.00
             }
         }
