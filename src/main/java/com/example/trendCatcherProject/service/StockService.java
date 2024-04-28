@@ -25,19 +25,20 @@ public class StockService {
     private AverageMove averageMove;
 
     @Autowired
-    public StockService(RestTemplate restTemplate, AverageMove averageMove){
+    public StockService(RestTemplate restTemplate, AverageMove averageMove) {
 
         this.restTemplate = restTemplate;
-        this.averageMove =averageMove;
+        this.averageMove = averageMove;
     }
     //inject RestTemplate obj when StockService is created
     //configured and a bean
 
     public AverageMove getAverageMove() {
+
         return this.averageMove;
     }
 
-    public List<StockData> getHistoricData(String stockSymbol){
+    public List<StockData> getHistoricData(String stockSymbol) {
         String url = alphaVantageURL + stockSymbol + "&outputsize=full&apikey=" + apiKey;
 
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
@@ -49,7 +50,7 @@ public class StockService {
         List<StockData> stockDataList = new ArrayList<>();
         //will contain information for each day
 
-        try{
+        try {
             ObjectMapper objectMapper = new ObjectMapper();
             //serialize java obj to JSON and deserialize JSON to java obj
             JsonNode rootNode = objectMapper.readTree(responseBody);
@@ -85,61 +86,61 @@ public class StockService {
                 }
             }
 
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
         updateTwoDayMove(stockDataList);
         updateFiveDayMove(stockDataList);
         updateTenDayMove(stockDataList);
 
-        return  stockDataList;
+        return stockDataList;
     }
 
-    public void updateTwoDayMove(List<StockData> stockDataList){
-        for(int i = stockDataList.size()-1; i >= 0; i--){
+    public void updateTwoDayMove(List<StockData> stockDataList) {
+        for (int i = stockDataList.size() - 1; i >= 0; i--) {
             StockData startDay = stockDataList.get(i);
             //set to ith object
-            if(i - 2 >= 0){
+            if (i - 2 >= 0) {
                 StockData futureTwoDays = stockDataList.get(i - 2);
                 //get 2 days ahead of startDay
 
                 double twoDayPercentageMove = calculatePercentageMove(startDay.getOpen(), futureTwoDays.getClose());
                 startDay.setTwoDayPercentageMove(twoDayPercentageMove);
-            }else{
+            } else {
                 startDay.setTwoDayPercentageMove(100.00);
                 //if future days don't exist, set to 100.00
             }
         }
     }
 
-    public void updateFiveDayMove(List<StockData> stockDataList){
-        for(int i = stockDataList.size()-1; i >= 0; i--){
+    public void updateFiveDayMove(List<StockData> stockDataList) {
+        for (int i = stockDataList.size() - 1; i >= 0; i--) {
             StockData startDay = stockDataList.get(i);
             //set to ith object
-            if(i - 5 >= 0){
+            if (i - 5 >= 0) {
                 StockData futureFiveDays = stockDataList.get(i - 5);
                 //get 5 days ahead of startDay
 
                 double fiveDayPercentageMove = calculatePercentageMove(startDay.getOpen(), futureFiveDays.getClose());
                 startDay.setFiveDayPercentageMove(fiveDayPercentageMove);
-            }else{
+            } else {
                 startDay.setFiveDayPercentageMove(100.00);
                 //if future days don't exist, set to 100.00
             }
         }
     }
 
-    public void updateTenDayMove(List<StockData> stockDataList){
-        for(int i = stockDataList.size()-1; i >= 0; i--){
+    public void updateTenDayMove(List<StockData> stockDataList) {
+        for (int i = stockDataList.size() - 1; i >= 0; i--) {
             StockData startDay = stockDataList.get(i);
             //set to ith object
-            if(i - 10 >= 0){
+            if (i - 10 >= 0) {
                 StockData futureTenDays = stockDataList.get(i - 10);
                 //get 10 days ahead of startDay
 
                 double tenDayPercentageMove = calculatePercentageMove(startDay.getOpen(), futureTenDays.getClose());
                 startDay.setTenDayPercentageMove(tenDayPercentageMove);
-            }else{
+            } else {
                 startDay.setTenDayPercentageMove(100.00);
                 //if future days don't exist, set to 100.00
             }
@@ -147,36 +148,83 @@ public class StockService {
     }
 
     public double calculatePercentageMove(double start, double end) {
-        double result =  ((end - start) / start) * 100;
-        return Math.ceil(result * 100)/100;
+        double result = ((end - start) / start) * 100;
+        return Math.ceil(result * 100) / 100;
     }
+//-----------------------------------------------------------------------------------
 
-    //gets all obj where intraday move is 1% or greater
-    public List<StockData> avgTwoDayMoveOnePer (List<StockData> stockDataList) {
-        List<StockData> avgTwoDayOnePer = new ArrayList<>();
+
+    //gets all obj where intraday move is --% or greater
+    public List<StockData> getAllObjWhenConIsTruePos(List<StockData> stockDataList, double percentageMove) {
+        List<StockData> intradayConditionMet = new ArrayList<>();
         for (int i = 0; i < stockDataList.size(); i++) {
             StockData current = stockDataList.get(i);
-            if (current.getIntradayPercentageMove() >= 1.00) {
-                avgTwoDayOnePer.add(current);
+            if (current.getIntradayPercentageMove() >= percentageMove) {
+                intradayConditionMet.add(current);
             }
         }
-        return avgTwoDayOnePer;
+        return intradayConditionMet;
     }
 
-    public int settingAvgTwoDayMoveOnePer(List<StockData> avgTwoDayOnePer){
+    //get avg from conditional set list, and setting
+    public double avgTwoDayMove(List<StockData> intradayConditionMet) {
         int counter = 0;
         double sum = 0;
 
-        for(int i = 0; i < avgTwoDayOnePer.size(); i++){
-            StockData current = avgTwoDayOnePer.get(i);
-            if(current.getTwoDayPercentageMove() != 100){
+        for (int i = 0; i < intradayConditionMet.size(); i++) {
+            StockData current = intradayConditionMet.get(i);
+            if (current.getTwoDayPercentageMove() != 100) {
                 sum += current.getTwoDayPercentageMove();
                 counter++;
             }
         }
-        averageMove.setAvgTwoDayMoveOnePer(sum/counter);
-        return counter;
+        return sum / counter;
     }
+
+    public double avgFiveDayMove(List<StockData> intradayConditionMet) {
+        int counter = 0;
+        double sum = 0;
+
+        for (int i = 0; i < intradayConditionMet.size(); i++) {
+            StockData current = intradayConditionMet.get(i);
+            if (current.getFiveDayPercentageMove() != 100) {
+                sum += current.getFiveDayPercentageMove();
+                counter++;
+            }
+        }
+        return sum / counter;
+    }
+
+    public double avgTenDayMove(List<StockData> intradayConditionMet) {
+        int counter = 0;
+        double sum = 0;
+
+        for (int i = 0; i < intradayConditionMet.size(); i++) {
+            StockData current = intradayConditionMet.get(i);
+            if (current.getTenDayPercentageMove() != 100) {
+                sum += current.getTenDayPercentageMove();
+                counter++;
+            }
+        }
+        return sum / counter;
+    }
+
+    //setting all avg moves
+    public void settingAllAvgMoves(double avgTwoDayMove, double avgFiveDayMove, double avgTenDayMove){
+        averageMove.setAvgTwoDayMove(avgTwoDayMove);
+        averageMove.setAvgFiveDayMove(avgFiveDayMove);
+        averageMove.setAvgTenDayMove(avgTenDayMove);
+    }
+
+    public String getAllAvgMoves(){
+        return String.format("avgTwoDayMove: %.2f%%,<br> avgFiveDayMove: %.2f%%,<br> avgTenDayMove: %.2f%%",
+                averageMove.getAvgTwoDayMove(),
+                averageMove.getAvgFiveDayMove(),
+                averageMove.getAvgTenDayMove());
+    }
+
+
+}
 
 
 
@@ -199,4 +247,3 @@ public class StockService {
 
 
 
-}
