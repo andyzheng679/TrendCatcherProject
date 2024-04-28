@@ -166,7 +166,7 @@ public class StockService {
         return intradayConditionMet;
     }
 
-    //get avg from conditional set list, and setting
+    //get avg from conditional set list
     public double avgTwoDayMove(List<StockData> intradayConditionMet) {
         int counter = 0;
         double sum = 0;
