@@ -37,15 +37,26 @@
 
 <div class = "avgMoveData" th:utext="${avgMoves}"></div>
 
-<div th:each="stockData : ${filteredData}" class="stock-row">
-    <div class="stock-info">
-        <p>Date: <span th:text="${stockData.date}"></span></p>
-        <p>Open: <span th:text="${stockData.open}"></span></p>
-        <p>High: <span th:text="${stockData.high}"></span></p>
-        <p>Low: <span th:text="${stockData.low}"></span></p>
-        <p>Close: <span th:text="${stockData.close}"></span></p>
-    </div>
-</div>
+<table>
+    <thead th:if="${not #lists.isEmpty(filteredData)}">
+    <tr>
+        <th>Date</th>
+        <th>Open</th>
+        <th>High</th>
+        <th>Low</th>
+        <th>Close</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="stockData : ${filteredData}">
+        <td th:text="${stockData.date}"></td>
+        <td th:text="${stockData.open}"></td>
+        <td th:text="${stockData.high}"></td>
+        <td th:text="${stockData.low}"></td>
+        <td th:text="${stockData.close}"></td>
+    </tr>
+    </tbody>
+</table>
 
 </body>
 </html>

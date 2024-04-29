@@ -31,16 +31,21 @@ body {
     margin-top: 20px;
 }
 
-.stock-row {
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    padding: 10px;
+
+
+
+table {
+    margin: 0 auto; /* Center the table horizontally */
+    border-collapse: collapse; /* Collapse table borders */
+    width: 80%; /* Set the width of the table */
 }
 
-.stock-info {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin: 5px 0;
-    padding-right: 10px; /* Adjust the space between each value */
+th, td {
+    padding: 8px; /* Add padding to table cells */
+    text-align: center; /* Center-align the content of table cells */
+}
+
+/* Style even rows with background color */
+tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
 }
