@@ -29,14 +29,18 @@ public class TrendCatcherController {
     public String stockInfo(@RequestParam("ticker") String ticker, @RequestParam("move") double move, Model model){
         ticker = ticker.toUpperCase();
         List<StockData> historicData = stockService.getHistoricData(ticker);
-        double twoDays = stockService.avgTwoDayMove(stockService.getAllObjWhenConIsTruePos(historicData, move));
-        double fiveDays = stockService.avgFiveDayMove(stockService.getAllObjWhenConIsTruePos(historicData, move));
-        double tenDays = stockService.avgTenDayMove(stockService.getAllObjWhenConIsTruePos(historicData, move));
+        List<StockData> filteredData = stockService.getAllObjWhenConIsTruePos(historicData, move);
+        double twoDays = stockService.avgTwoDayMove(filteredData);
+        double fiveDays = stockService.avgFiveDayMove(filteredData);
+        double tenDays = stockService.avgTenDayMove(filteredData);
         stockService.settingAllAvgMoves(twoDays,fiveDays, tenDays);
 
         String avgMoves = stockService.getAllAvgMoves();
+
         model.addAttribute("avgMoves", avgMoves);
         model.addAttribute("ticker", ticker);
+        model.addAttribute("move", move);
+        model.addAttribute("filteredData", filteredData);
 
         return "mainPage";
     }
@@ -73,7 +77,7 @@ public class TrendCatcherController {
 
     @GetMapping("/test2")
     public List<StockData> getAllOnePerIntraday(){
-        return stockService.getAllObjWhenConIsTruePos(stockService.getHistoricData("SPY"), 1.00);
+        return stockService.getAllObjWhenConIsTruePos(stockService.getHistoricData("SPY"), -1.00);
     }
 
 

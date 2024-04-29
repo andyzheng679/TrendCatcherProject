@@ -154,7 +154,7 @@ public class StockService {
 //-----------------------------------------------------------------------------------
 
 
-    //gets all obj where intraday move is --% or greater
+    //gets all obj where intraday move is --% or greater or less
     public List<StockData> getAllObjWhenConIsTruePos(List<StockData> stockDataList, double percentageMove) {
         List<StockData> intradayConditionMet = new ArrayList<>();
         for (int i = 0; i < stockDataList.size(); i++) {
@@ -236,10 +236,35 @@ public class StockService {
     }
 
     public String getAllAvgMoves(){
-        return String.format("avgTwoDayMove: %.2f%%,<br> avgFiveDayMove: %.2f%%,<br> avgTenDayMove: %.2f%%",
-                averageMove.getAvgTwoDayMove(),
-                averageMove.getAvgFiveDayMove(),
-                averageMove.getAvgTenDayMove());
+
+        String twoDayColor = "";
+        String fiveDayColor = "";
+        String tenDayColor = "";
+
+        if(averageMove.getAvgTwoDayMove() >= 0){
+            twoDayColor = "green";
+        }else {
+            twoDayColor = "red";
+        }
+
+        if(averageMove.getAvgFiveDayMove() >= 0){
+            fiveDayColor = "green";
+        }else {
+            fiveDayColor = "red";
+        }
+
+        if(averageMove.getAvgTenDayMove() >= 0){
+            tenDayColor = "green";
+        }else {
+            tenDayColor = "red";
+        }
+
+        return String.format("<b>Average Two Day Move:</b> <span style='color:%s;'>%.2f%%</span>" +
+                        "<br> <b>Average Five Day Move:</b> <span style='color:%s;'>%.2f%%</span>" +
+                        "<br> <b>Average Ten Day Move:</b> <span style='color:%s;'>%.2f%%</span>",
+                twoDayColor, averageMove.getAvgTwoDayMove(),
+                fiveDayColor, averageMove.getAvgFiveDayMove(),
+                tenDayColor, averageMove.getAvgTenDayMove());
     }
 
 
