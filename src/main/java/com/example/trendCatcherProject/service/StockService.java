@@ -63,7 +63,7 @@ public class StockService {
                 Iterator<Map.Entry<String, JsonNode>> fields = timeSeriesNode.fields();
                 //looping through a map like structure, key values
 
-                LocalDate fiveYearsAgo = LocalDate.now().minusYears(1); //change back to 5 years
+                LocalDate fiveYearsAgo = LocalDate.now().minusYears(5); //change back to 5 years
                 //date 5 year from today
 
                 while (fields.hasNext()) {

@@ -45,6 +45,10 @@
         <th>High</th>
         <th>Low</th>
         <th>Close</th>
+        <th>Intraday(%)</th>
+        <th>+2 Day Change(%)</th>
+        <th>+5 Day Change(%)</th>
+        <th>+10 Day Change(%)</th>
     </tr>
     </thead>
     <tbody>
@@ -54,6 +58,10 @@
         <td th:text="${stockData.high}"></td>
         <td th:text="${stockData.low}"></td>
         <td th:text="${stockData.close}"></td>
+        <td th:text="${stockData.intradayPercentageMove}"></td>
+        <td th:text="${stockData.twoDayPercentageMove}"></td>
+        <td th:text="${stockData.fiveDayPercentageMove}"></td>
+        <td th:text="${stockData.tenDayPercentageMove}"></td>
     </tr>
     </tbody>
 </table>
