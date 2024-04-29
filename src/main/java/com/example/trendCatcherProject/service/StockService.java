@@ -159,8 +159,14 @@ public class StockService {
         List<StockData> intradayConditionMet = new ArrayList<>();
         for (int i = 0; i < stockDataList.size(); i++) {
             StockData current = stockDataList.get(i);
-            if (current.getIntradayPercentageMove() >= percentageMove) {
-                intradayConditionMet.add(current);
+            if(percentageMove >= 1.00) {
+                if (current.getIntradayPercentageMove() >= percentageMove) {
+                    intradayConditionMet.add(current);
+                }
+            } else if (percentageMove <= -1.00) {
+                if (current.getIntradayPercentageMove() <= percentageMove) {
+                    intradayConditionMet.add(current);
+                }
             }
         }
         return intradayConditionMet;
@@ -178,7 +184,11 @@ public class StockService {
                 counter++;
             }
         }
-        return sum / counter;
+        if(counter > 0){
+            return sum / counter;
+        }else{
+            return 0.0;
+        }
     }
 
     public double avgFiveDayMove(List<StockData> intradayConditionMet) {
@@ -192,7 +202,11 @@ public class StockService {
                 counter++;
             }
         }
-        return sum / counter;
+        if(counter > 0){
+            return sum / counter;
+        }else{
+            return 0.0;
+        }
     }
 
     public double avgTenDayMove(List<StockData> intradayConditionMet) {
@@ -206,7 +220,12 @@ public class StockService {
                 counter++;
             }
         }
-        return sum / counter;
+
+        if(counter > 0){
+            return sum / counter;
+        }else{
+            return 0.0;
+        }
     }
 
     //setting all avg moves

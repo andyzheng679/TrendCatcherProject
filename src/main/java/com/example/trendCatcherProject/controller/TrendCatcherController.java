@@ -26,16 +26,17 @@ public class TrendCatcherController {
     }
 
     @PostMapping("/mainPage")
-    public String stockInfo(@RequestParam("ticker") String ticker, Model model){
+    public String stockInfo(@RequestParam("ticker") String ticker, @RequestParam("move") double move, Model model){
         ticker = ticker.toUpperCase();
         List<StockData> historicData = stockService.getHistoricData(ticker);
-        double twoDays = stockService.avgTwoDayMove(stockService.getAllObjWhenConIsTruePos(historicData, 1.00));
-        double fiveDays = stockService.avgFiveDayMove(stockService.getAllObjWhenConIsTruePos(historicData, 1.00));
-        double tenDays = stockService.avgTenDayMove(stockService.getAllObjWhenConIsTruePos(historicData, 1.00));
+        double twoDays = stockService.avgTwoDayMove(stockService.getAllObjWhenConIsTruePos(historicData, move));
+        double fiveDays = stockService.avgFiveDayMove(stockService.getAllObjWhenConIsTruePos(historicData, move));
+        double tenDays = stockService.avgTenDayMove(stockService.getAllObjWhenConIsTruePos(historicData, move));
         stockService.settingAllAvgMoves(twoDays,fiveDays, tenDays);
 
         String avgMoves = stockService.getAllAvgMoves();
         model.addAttribute("avgMoves", avgMoves);
+        model.addAttribute("ticker", ticker);
 
         return "mainPage";
     }

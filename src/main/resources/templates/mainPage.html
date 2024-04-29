@@ -6,12 +6,23 @@
     <title>Main Page</title>
 </head>
 <body>
-<h1>Welcome to the Main Page</h1>
+<h1>Welcome to Trend Catcher</h1>
 <h1><span th:text="${ticker}"></span></h1>
 
 <form action="/mainPage" method="post">
     <label for="ticker">Enter Stock Ticker Symbol:</label>
     <input type="text" id="ticker" name="ticker">
+
+    <label for="move">Select Move:</label>
+    <select id="move" name="move">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="-1">-1</option>
+        <option value="-2">-2</option>
+        <option value="-3">-3</option>
+    </select>
+
     <input type="submit" value="Submit">
 </form>
 
